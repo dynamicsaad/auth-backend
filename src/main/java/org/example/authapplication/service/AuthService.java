@@ -14,6 +14,11 @@ public class AuthService {
     }
 
     public ResponseEntity<String> signup(User user) {
+        // Check if user already exists
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            return ResponseEntity.badRequest().body("User with this email already exists");
+        }
+        
         // No password encoding - VERY UNSAFE
         userRepository.save(user);
         return ResponseEntity.ok("Signup successful!");
